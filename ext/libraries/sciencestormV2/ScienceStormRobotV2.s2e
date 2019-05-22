@@ -1,0 +1,461 @@
+{
+    "extensionName": "ScienceStormRobotV2",
+    "extensionPort": 0,
+    "sort": 1,
+    "firmware": "1.0",
+    "javascriptURL": "js/ScienceStormRobot.js",
+    "blockSpecs": [
+        [
+            "h",
+            "ScienceStormRobot",
+            "runArduino",
+            {
+                "src": "",
+                "inc": "#include <io_GP_V1.h>",
+                "def": "",
+                "setup": "",
+                "loop": ""
+            }
+        ],
+        [
+            "-"
+        ],
+        [
+            "w",
+            "set %d.digitalPort is %d.highlow",
+            "setDigitalPort",
+            "P3",
+            "HIGH",
+            {
+                "encode": "{d0}{d1}",
+                "setup": "",
+                "inc": "",
+                "def": "SsRob_Port dout{0}(P{0});\n",
+                "work": "dout{0}.dWrite1({1});\n",
+                "loop": ""
+            }
+        ],
+        [
+            "b",
+            "detect digital port %d.digitalPort",
+            "getdigitalPort",
+            "P3",
+            "HIGH",
+            {
+                "encode": "{d0}",
+                "setup": "",
+                "inc": "",
+                "def": "SsRob_Port din{0}(P{0});\n",
+                "work": "din{0}.dRead1()",
+                "loop": ""
+            }
+        ],
+        [
+            "r",
+            "analog port %d.analogPort read analog data",
+            "getanalog",
+            "P6",
+            {
+                "encode": "{d0}",
+                "setup": "",
+                "inc": "",
+                "def": "SsRob_Port ain{0}(P{0});\n",
+                "work": "ain{0}.aRead2()",
+                "loop": ""
+            }
+        ],
+        [
+            "-"
+        ],
+        [
+            "w",
+            "set %d.motorPort is %d.motorvalue",
+            "runMotor",
+            "M1",
+            255,
+            {
+                "encode": "{d0}{d1}",
+                "setup": "",
+                "inc": "",
+                "def": "SsRob_DcMotor dc_motor{0}(M{0});\n",
+                "work": "dc_motor{0}.setSpeed({1});\n",
+                "loop": ""
+            }
+        ],
+        [
+            "w",
+            "set LED %d.digitalPort red %d.value green %d.value blue %d.value",
+            "setLED",
+            "P3",
+            0,
+            0,
+            0,
+            {
+                "encode": "{d0}{d1}{d2}{d3}",
+                "setup": "",
+                "inc": "",
+                "def": "SsRob_RGBLED rgb_led{0}(P{0});\n",
+                "work": "rgb_led{0}.setcolor({1}, {2}, {3});\n",
+                "loop": ""
+            }
+        ],
+        [
+            "w",
+            "set Servo %d.pwmPort %d.slotValue is %d.angleValue",
+            "setServo",
+            "P1",
+            "SLOT1",
+            "90",
+            {
+                "encode": "{d0}{d1}",
+                "setup": "",
+                "inc": "",
+                "def": "",
+                "work": "",
+                "loop": ""
+            }
+        ],
+        [
+            "w",
+            "set OLED display %s = %d.value %s",
+            "setOLED",
+            "Distance",
+            10,
+            "cm",
+            {
+                "inc": "",
+                "def": "SsRob_OLED oled;\n",
+                "setup": "oled.begin();",
+                "work": "oled.show({0}, {1}, {2});\n",
+                "loop": ""
+            }
+        ],
+        [
+            "-"
+        ],
+        [
+            "r",
+            "ultrasonic sensor %d.digitalPort read distance",
+            "getUltrasonic",
+            "P3",
+            {
+                "inc": "",
+                "def": "SsRob_Ultrasonic ultrasonic{0}(P{0});\n",
+                "setup": "",
+                "work": "ultrasonic{0}.distanceCm()\n",
+                "loop": ""
+            }
+        ],
+        [
+            "r",
+            "read DHT11 %d.digitalPort temperature",
+            "getDht11Temperature",
+            "P3",
+            {
+                "inc": "",
+                "def": "SsRob_DHT11 dht11{0}(P{0});\n",
+                "setup": "",
+                "work": "dht11{0}.temperature()",
+                "loop": "dht11{0}.read();\n"
+            }
+        ],
+        [
+            "r",
+            "read DHT11 %d.digitalPort humidity",
+            "getDht11Humidity",
+            "P3",
+            {
+                "inc": "",
+                "def": "SsRob_DHT11 dht11{0}(P{0});\n",
+                "setup": "",
+                "work": "dht11{0}.humidity()",
+                "loop": "dht11{0}.read();\n"
+            }
+        ],
+        [
+            "-"
+        ],
+        [
+            "w",
+            "start detect PS2 remoter",
+            "getPS2start",
+            {
+                "setup": "",
+                "inc": "",
+                "def": "SsRob_PS2 ps2;\n",
+                "work": "ps2.read();\n",
+                "loop": ""
+            }
+        ],
+        [
+            "b",
+            "the %d.buttons button was pressed",
+            "getPS2Pressed",
+            "PS2X_TRIANGLE",
+            {
+                "setup": "",
+                "inc": "",
+                "def": "",
+                "work": "ps2.isButtonPressed({0})",
+                "loop": ""
+            }
+        ],
+        [
+            "b",
+            "the %d.buttons button was just Released",
+            "getPS2Released",
+            "PS2X_CIRCLE",
+            {
+                "setup": "",
+                "inc": "",
+                "def": "",
+                "work": "ps2.isButtonReleased({0})",
+                "loop": ""
+            }
+        ],
+        [
+            "b",
+            "the %d.buttons button keep pressing",
+            "getPS2KeepPressed",
+            "PS2X_SQUARE",
+            {
+                "setup": "",
+                "inc": "",
+                "def": "",
+                "work": "ps2.isButtonKeepPressed({0})",
+                "loop": ""
+            }
+        ],
+        [
+            "r",
+            "%d.sticks stick value",
+            "getPS2StickAnalog",
+            "PS2X_RIGHT_HORIZONTAL",
+            {
+                "setup": "",
+                "inc": "",
+                "def": "",
+                "work": "ps2.getStickAnalog({0})",
+                "loop": ""
+            }
+        ],
+        [
+            "-"
+        ],
+        [
+            "b",
+            "data available?",
+            "isAvailable",
+            {
+                "setup": "Serial.begin(9600);\n",
+                "inc": "",
+                "def": "",
+                "work": "Serial.available()",
+                "loop": ""
+            }
+        ],
+        [
+            "R",
+            "serial read byte",
+            "serialRead",
+            {
+                "setup": "Serial.begin(9600);\n",
+                "inc": "",
+                "def": "",
+                "work": "Serial.read()",
+                "loop": ""
+            }
+        ],
+        [
+            "R",
+            "read line",
+            "readLine",
+            {
+                "setup": "Serial.begin(9600);\n",
+                "inc": "",
+                "def": "",
+                "work": "Serial.readString()",
+                "loop": ""
+            }
+        ],
+        [
+            "w",
+            "send command %s = %s",
+            "writeCommand",
+            "变量名",
+            "数值",
+            {
+                "setup": "Serial.begin(115200);\n",
+                "inc": "",
+                "def": "",
+                "work": "Serial.print({0});Serial.print(\"=\");Serial.println({1});\n",
+                "loop": ""
+            }
+        ],
+        [
+            "w",
+            "serial write text %s",
+            "serialWrite",
+            "hello",
+            {
+                "setup": "Serial.begin(115200);\n",
+                "inc": "",
+                "def": "",
+                "work": "Serial.println({0});\n",
+                "loop": ""
+            }
+        ]
+    ],
+    "menus": {
+        "slotValue": [
+            "SLOT1",
+            "SLOT2"
+        ],
+        "motorvalue": [
+            255,
+            100,
+            50,
+            0,
+            -50,
+            -100,
+            -255
+        ],
+        "angleValue": [
+            0,
+            45,
+            90,
+            135,
+            180
+        ],
+        "value":[0,20,60,150,255],
+        "motorPort": [
+            "M1",
+            "M2"
+        ],
+        "pwmPort":[
+            "P1",
+            "P2"
+        ],
+        "digitalPort": [
+            "P3",
+            "P4",
+            "P5",
+            "P6",
+            "P7",
+            "P8"
+        ],
+        "analogPort": [
+            "P6",
+            "P7",
+            "P8"
+        ],
+        "highlow": [
+            "HIGH",
+            "LOW"
+        ],
+        "buttons": [
+            "PS2X_SELECT",
+            "PS2X_L3",
+            "PS2X_R3",
+            "PS2X_START",
+            "PS2X_UP",
+            "PS2X_RIGHT",
+            "PS2X_DOWN",
+            "PS2X_LEFT",
+            "PS2X_L2",
+            "PS2X_R2",
+            "PS2X_L1",
+            "PS2X_R1",
+            "PS2X_TRIANGLE",
+            "PS2X_CIRCLE",
+            "PS2X_CROSS",
+            "PS2X_SQUARE"
+        ],
+        "sticks": [
+            "PS2X_RIGHT_HORIZONTAL",
+            "PS2X_RIGHT_VERTICAL",
+            "PS2X_LEFT_HORIZONTAL",
+            "PS2X_LEFT_VERTICAL"
+        ]
+    },
+    "values": {
+        "SLOT1": 1,
+        "SLOT2": 2,
+        "HIGH": 1,
+        "LOW": 0,
+        "P1": 1,
+        "P2": 2,
+        "P3": 3,
+        "P4": 4,
+        "P5": 5,
+        "P6": 6,
+        "P7": 7,
+        "P8": 8,
+        "P9": 9,
+        "P10": 10,
+        "M1": 1,
+        "M2": 2,
+        "PS2X_SELECT": 1,
+        "PS2X_L3": 2,
+        "PS2X_R3": 4,
+        "PS2X_START": 8,
+        "PS2X_UP": 16,
+        "PS2X_RIGHT": 32,
+        "PS2X_DOWN": 64,
+        "PS2X_LEFT": 128,
+        "PS2X_L2": 256,
+        "PS2X_R2": 512,
+        "PS2X_L1": 1024,
+        "PS2X_R1": 2048,
+        "PS2X_TRIANGLE": 4096,
+        "PS2X_CIRCLE": 8192,
+        "PS2X_CROSS": 16384,
+        "PS2X_SQUARE": 32768,
+        "PS2X_RIGHT_HORIZONTAL": 5,
+        "PS2X_RIGHT_VERTICAL": 6,
+        "PS2X_LEFT_HORIZONTAL": 7,
+        "PS2X_LEFT_VERTICAL": 8
+    },
+    "translators": {
+        "zh_CN": {
+            "ScienceStormRobot": "科技风暴主程序",
+            "HIGH": "高电平",
+            "LOW": "低电平",
+            "set %d.digitalPort is %d.highlow": "设置 %d.digitalPort 为 %d.highlow",
+            "set LED %d.digitalPort red %d.value green %d.value blue %d.value": "设置LED %d.digitalPort 红色 %d.value 绿色 %d.value 蓝色 %d.value",
+            "set Servo %d.pwmPort %d.slotValue is %d.angleValue": "设置舵机 %d.pwmPort %d.slotValue 角度为 %d.angleValue",
+            "set %d.motorPort is %d.motorvalue": "设置 %d.motorPort 为 %d.motorvalue",
+            "set OLED display %s = %d.value %s": "设置OLED显示屏显示 %s = %d.value %s",
+            "detect digital port %d.digitalPort": "读取 %d.digitalPort 电平",
+            "analog port %d.analogPort read analog data": "读取 %d.analogPort 模拟值",
+            "ultrasonic sensor %d.digitalPort read distance": "超声波传感器 %d.digitalPort 读取距离",
+            "read DHT11 %d.digitalPort temperature": "温湿度传感器 %d.digitalPort 读取温度",
+            "read DHT11 %d.digitalPort humidity": "温湿度传感器 %d.digitalPort 读取湿度",
+            "PS2X_SELECT": "选择键",
+            "PS2X_START": "开始键",
+            "PS2X_RIGHT": "右按键",
+            "PS2X_LEFT": "左按键",
+            "PS2X_DOWN": "下按键",
+            "PS2X_UP": "上按键",
+            "PS2X_CIRCLE": "圆圈",
+            "PS2X_CROSS": "叉号",
+            "PS2X_SQUARE": "正方形",
+            "PS2X_TRIANGLE": "三角形",
+            "PS2X_RIGHT_HORIZONTAL": "右摇杆的水平",
+            "PS2X_RIGHT_VERTICAL": "右摇杆的垂直",
+            "PS2X_LEFT_HORIZONTAL": "左摇杆的水平",
+            "PS2X_LEFT_VERTICAL": "左摇杆的垂直",
+            "start detect PS2 remoter": "读取PS2摇杆按钮",
+            "the %d.buttons button was pressed": "%d.buttons 按钮被按下",
+            "the %d.buttons button was just Released": "%d.buttons 按钮被放开",
+            "the %d.buttons button keep pressing": " %d.buttons 按钮被持续按下",
+            "%d.sticks stick value": "读取 %d.sticks 数值大小",
+            "PS2X_L3": "L3",
+            "PS2X_R3": "R3",
+            "PS2X_L2": "L2",
+            "PS2X_R2": "R2",
+            "PS2X_L1": "L1",
+            "PS2X_R1": "R1"
+        }
+    }
+}

@@ -1,0 +1,57 @@
+#######################################
+# Syntax Coloring Map For ScienceStorm
+#######################################
+
+#######################################
+# Class
+#######################################
+
+SsRob_Port	      KEYWORD1
+SsRob_RGBLED   	KEYWORD1
+
+#######################################
+# Methods and Functions
+#######################################	
+
+getPort	      KEYWORD2
+getSlot	      KEYWORD2
+dRead1	     	      KEYWORD2
+dRead2	            KEYWORD2
+dpRead1	      KEYWORD2
+dpRead2	      KEYWORD2
+dWrite1	      KEYWORD2
+dWrite2	      KEYWORD2
+aRead1 	      KEYWORD2
+aRead2 	      KEYWORD2
+aWrite1	      KEYWORD2
+aWrite2	      KEYWORD2
+reset  	      KEYWORD2
+pin1	            KEYWORD2
+pin2	            KEYWORD2
+pin	            KEYWORD2
+setcolor	      KEYWORD2
+
+#######################################
+# Constants
+#######################################
+
+SLOT1             LITERAL1
+SLOT2             LITERAL1
+P1 		      LITERAL1
+P2 		      LITERAL1
+P3 		      LITERAL1
+P4 		      LITERAL1
+P5 		      LITERAL1
+P6 		      LITERAL1
+P7 		      LITERAL1
+P8 		      LITERAL1
+P9 		      LITERAL1
+P10 		      LITERAL1
+P11 		      LITERAL1
+P12 		      LITERAL1
+P13 		      LITERAL1
+P14 		      LITERAL1
+P15		      LITERAL1
+P16 		      LITERAL1
+M1 		      LITERAL1
+M2 		      LITERAL1
