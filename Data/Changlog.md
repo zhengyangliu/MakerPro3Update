@@ -1,6 +1,10 @@
 # 变更记录 #
 
-- Lastest Version: V1.0
+- Lastest Version: V1.1
+
+	调整工程结构
+
+- V1.0
 
 	正式版
 
