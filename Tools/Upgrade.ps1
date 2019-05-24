@@ -61,7 +61,7 @@ Remove-Item "C:\Users\$env:UserName\AppData\Roaming\com.ScienceStormRobot.Scratc
 # 复制更新包中的文件到程序中
 $KeepFolder = @("README.md", "Package.ps1", "KeepFile")
 Write-Host "正在更新文件..." -Foreground "Green"
-Copy-Item ."/Temp/Data/*" "./" -Exclude $KeepFolder -Force -Recurse
+Copy-Item ."/Temp/*" "./" -Exclude $KeepFolder -Force -Recurse
 
 # 删除下载和解压的文件
 Write-Host "正在删除删除缓存的安装包..." -Foreground "Green"

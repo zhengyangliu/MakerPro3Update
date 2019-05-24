@@ -31,7 +31,7 @@ README.md: 自述文件
 对应版本的Relase需要按一下规则释放
 
 - Relase版本号于当前Changlog.md中最新版本号相同,且 **V** 为大写
-- Relase中需要附带当前版本目录下文件的Zip压缩包压缩包名称为 **MakerPro3Update_V+版本号** 命名如： *MakerPro3Update_V0.2*
+- Relase中需要在**Data文件夹下**打包里面的文件，格式为**Zip**，压缩包名称以 **MakerPro3Update_V+版本号** 命名如： *MakerPro3Update_V0.2*
 
 ## 开发规则 ##
 
