@@ -3,7 +3,7 @@
 # 若相等则返回 0
 # ArthurZheng 2019/05/24
 
-$RemoteVersionAddr = "https://github.com/zhengyangliu/MakerPro3Update/blob/master/Changlog.md"
+$RemoteVersionAddr = "https://github.com/zhengyangliu/MakerPro3Update/blob/master/Data/Changlog.md"
 
 # 设置TLS连接以访问https网页
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
