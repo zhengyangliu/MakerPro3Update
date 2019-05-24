@@ -13,7 +13,7 @@ try {
     $RemoteChanglog = Invoke-WebRequest $RemoteVersionAddr 
 }
 catch {
-    # Write-Warning "无法连接服务器"
+    Write-Warning "连接服务器失败，无法更新本地版本"
     return 0
 }
 $RemoteVersion = ((($RemoteChanglog.tostring() -split "[`r`n]" | select-string "<p>Lastest Version:") -split "V")[2] -split "<")[0]
