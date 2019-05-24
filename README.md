@@ -5,10 +5,13 @@
 	MakerPro3Update
 	 ├── Data
 	 ├── Tools
-	 ├── Changlog.md
 	 ├── README.md
 
-除
+Data: 储存用于更新MakerPro3的固件
+
+Tools: 储存再MakerPro3中运行的脚本和打包更新的脚本
+
+README.md: 自述文件
 
 ## 功能实现 ##
 
