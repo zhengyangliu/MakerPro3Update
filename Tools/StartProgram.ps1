@@ -4,6 +4,9 @@
 
 Write-Host "正在加载程序请稍候..." -Foreground "Green"
 
+# 解锁Power脚本执行保护
+Set-ExecutionPolicy RemoteSigned
+
 # 静默运行版本检测脚本
 $NewVersion = PowerShell.exe -file 'CheckVersion.ps1'
 
@@ -11,7 +14,8 @@ $NewVersion = PowerShell.exe -file 'CheckVersion.ps1'
 if ($NewVersion -ne 0) { 
     Write-Host "-------------------------------------------------------------------------" -Foreground "Yellow"
     Write-Host "| 服务器有新版本" -Foreground "Yellow"
-    Write-Host "| 自动更新程序已启动请勿随意点击鼠标，更新结束后MakerPro3将自动启动" -Foreground "Yellow"
+    Write-Host "| 自动更新程序已启动请勿随意点击鼠标键盘和关闭程序" -Foreground "Yellow"
+    Write-Host "| 更新结束后MakerPro3将自动启动" -Foreground "Yellow"
     Write-Host "-------------------------------------------------------------------------" -Foreground "Yellow"
 
     PowerShell.exe -file "Upgrade.ps1" $NewVersion
