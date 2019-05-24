@@ -18,7 +18,7 @@ Sub CreateProgramShortCut(isPowershell)
         Set Shortcut = WSHShell.CreateShortCut(DesktopPath & "\Æô¶¯MakerPro3" & ".lnk") 
         if (isPowershell = true) Then
             Shortcut.TargetPath = "powershell.exe"
-            Shortcut.Arguments = """& {set-executionpolicy Remotesigned -Scope Process; .'.\StartProgram.ps1' }""" 
+            Shortcut.Arguments = """& {set-executionpolicy Remotesigned -Scope Process; .'" & CurrentPath & "\StartProgram.ps1' }""" 
         Else
             Shortcut.TargetPath = CurrentPath & "\MakerPro.exe" 
         End If
@@ -69,14 +69,14 @@ ElseIf InStr(Version, "6.1.") and (Arch="AMD64") Then
     Obj.Run ".\powershell\NDP451-KB2858728-x86-x64-AllOS-ENU.exe",,true
     Obj.Run ".\powershell\Win7-x64\Win7AndW2K8R2-KB3191566-x64.msu",,true
 
-ElseIf InStr(Version, "6.2.") and (Arch="x86") Then
+ElseIf (InStr(Version, "6.2.") or InStr(Version, "6.3.")) and (Arch="x86") Then
     ' Win8 x86
     Set Obj = CreateObject("Wscript.Shell")
     CreateProgramShortCut(true)
     Obj.Run ".\drivers\Driver_for_Windows.exe",,true
     Obj.Run ".\powershell\Win8.1-x86\Win8.1-KB3191564-x86.msu",,true
 
-ElseIf InStr(Version, "6.2.") and (Arch="AMD64") Then
+ElseIf (InStr(Version, "6.2.") or InStr(Version, "6.3.")) Then
     ' Win8 x64
     Set Obj = CreateObject("Wscript.Shell")
     CreateProgramShortCut(true)

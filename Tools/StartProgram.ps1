@@ -4,9 +4,6 @@
 
 Write-Host "正在加载程序请稍候..." -Foreground "Green"
 
-# 解锁Power脚本执行保护
-Set-ExecutionPolicy RemoteSigned
-
 # 静默运行版本检测脚本
 $NewVersion = PowerShell.exe -file 'CheckVersion.ps1'
 
