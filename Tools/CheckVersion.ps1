@@ -13,7 +13,7 @@ try {
     $RemoteChanglog = Invoke-WebRequest $RemoteVersionAddr 
 }
 catch {
-    return 0
+    return "Offline"
 }
 $RemoteVersion = ((($RemoteChanglog.tostring() -split "[`r`n]" | select-string "<p>Lastest Version:") -split "V")[2] -split "<")[0]
 
@@ -31,5 +31,5 @@ if ($RemoteVersion -gt $LocalVersion) {
 }
 else {
     # 已经是最新版本无需更新
-    return 0
+    return "Latest"
 }

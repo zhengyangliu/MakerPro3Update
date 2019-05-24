@@ -8,7 +8,23 @@ Write-Host "正在加载程序请稍候..." -Foreground "Green"
 $NewVersion = PowerShell.exe -file 'CheckVersion.ps1'
 
 # CheckVersion返回非0，需要升级
-if ($NewVersion -ne 0) { 
+if ($NewVersion -eq "Offline") { 
+    Write-Host "-------------------------------------------------------------------------" -Foreground "Yellow"
+    Write-Host "| 无法访问服务器" -Foreground "Red"
+    Write-Host "| 1秒后程序将自动启动" -Foreground "Yellow"
+    Write-Host "-------------------------------------------------------------------------" -Foreground "Yellow"
+    Start-Sleep 1
+    Start-Process -FilePath "./MakerPro.exe"
+}
+elseif ($NewVersion -eq "Latest") { 
+    Write-Host "-------------------------------------------------------------------------" -Foreground "Green"
+    Write-Host "| 已经是最新版本，无需更新" -Foreground "Green"
+    Write-Host "| 1秒后程序将自动启动" -Foreground "Green"
+    Write-Host "-------------------------------------------------------------------------" -Foreground "Green"
+    Start-Sleep 1
+    Start-Process -FilePath "./MakerPro.exe"
+}
+else { 
     Write-Host "-------------------------------------------------------------------------" -Foreground "Yellow"
     Write-Host "| 服务器有新版本" -Foreground "Yellow"
     Write-Host "| 自动更新程序已启动请勿随意点击鼠标键盘和关闭程序" -Foreground "Yellow"
@@ -22,10 +38,6 @@ if ($NewVersion -ne 0) {
     Write-Host "| 2秒后程序将自动启动" -Foreground "Yellow"
     Write-Host "-------------------------------------------------------------------------" -Foreground "Yellow"
 
-    Start-Sleep 2
-    Start-Process -FilePath "./MakerPro.exe"
-}
-# 如果不需要升级则直接启动MakerPro3主程序
-else {
+    Start-Sleep 2 
     Start-Process -FilePath "./MakerPro.exe"
 }
