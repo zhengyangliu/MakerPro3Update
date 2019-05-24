@@ -1,5 +1,15 @@
 # MakerPro3升级补丁 #
 
+## 文件结构 ##
+
+	MakerPro3Update
+	 ├── Data
+	 ├── Tools
+	 ├── Changlog.md
+	 ├── README.md
+
+除
+
 ## 功能实现 ##
 
 在软件中的Powershell脚本将会自动检测在Master分支下的Changlog.md中Lastest Version 行中的V开头的版本号，如下行版本号为0.2。
