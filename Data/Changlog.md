@@ -1,6 +1,10 @@
 # 变更记录 #
 
-- Lastest Version: V1.1
+- Lastest Version: V1.2
+
+	修复缺失的库文件
+
+- V1.1
 
 	调整工程结构
 
