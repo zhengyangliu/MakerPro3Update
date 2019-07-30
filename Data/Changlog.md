@@ -1,6 +1,10 @@
 # 变更记录 #
 
-- Lastest Version: V1.2
+- Lastest Version: V2.0
+
+	更新大量的库支持内容，变更软件更新方式
+
+- V1.2
 
 	修复缺失的库文件
 

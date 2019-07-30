@@ -28,6 +28,16 @@ Sub CreateProgramShortCut(isPowershell)
         Shortcut.IconLocation = CurrentPath & "\MakerPro.ico"
         Shortcut.Save
         Set Shortcut = Nothing 
+
+        Set ShortcutOffline = WSHShell.CreateShortCut(DesktopPath & "\启动MakerPro3离线版" & ".lnk") 
+        ShortcutOffline.TargetPath = CurrentPath & "\MakerPro.exe" 
+        ShortcutOffline.Description = "启动MakerPro3离线版"
+        ShortcutOffline.WorkingDirectory = CurrentPath
+        ShortcutOffline.WindowStyle = 1 
+        ShortcutOffline.IconLocation = CurrentPath & "\MakerPro.ico"
+        ShortcutOffline.Save
+        Set ShortcutOffline = Nothing 
+
     end if
 End Sub
 

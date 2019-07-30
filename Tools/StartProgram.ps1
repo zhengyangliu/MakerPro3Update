@@ -32,7 +32,6 @@ else {
     Write-Host "-------------------------------------------------------------------------" -Foreground "Yellow"
 
     PowerShell.exe -file "Upgrade.ps1" $NewVersion
-    notepad.exe "./Changlog.md"
 
     Write-Host "-------------------------------------------------------------------------" -Foreground "Yellow"
     Write-Host "| 更新完成" -Foreground "Yellow"
