@@ -1,0 +1,707 @@
+{
+    "extensionName": "SsRob_Warden",
+    "extensionPort": 0,
+    "sort": 0,
+    "firmware": "1.0",
+    "javascriptURL": "js/SsRob_Warden.js",
+    "blockSpecs": [
+        [
+            "h",
+            "Warden Main",
+            "runArduino",
+            {
+                "src": "",
+                "inc": "#include <SsRob_IO_Warden.h>\n",
+                "def": "",
+                "setup": "",
+                "loop": ""
+            }
+        ],
+        [
+            "-"
+        ],
+        [
+            "w",
+            "warden car %m.direction at speed %d.motorvalue",
+            "runWarden",
+            "run forward",
+            255,
+            {
+                "encode": "{d0}{s1}",
+                "setup": "",
+                "inc": "#include <Warden_Move.h>\n",
+                "def": "\n", // \n用于消除不加载include的bug
+                "work": "move({0},{1});\n",
+                "loop": ""
+            }
+        ],
+        [
+            "-"
+        ],
+        [ // DC电机图块
+            "w",
+            "set motor %d.motorPort speed %d.motorvalue",
+            "runMotor",
+            "PORT1",
+            255,
+            {
+                "encode": "{d0}{s1}",
+                "setup": "",
+                "inc": "#include <SSRob_DCMotor.h>\n",
+                "def": "SSRob_DCMotor motor{0}(PORT{0});\n",
+                "work": "motor{0}.run({1});\n",
+                "loop": ""
+            }
+        ],
+        [ // LED图块
+            "w",
+            "set LED %d.digitalPort is %d.offOn",
+            "setLED",
+            "PORT2",
+            "ON",
+            {
+                "encode": "{d0}{d1}",
+                "setup": "",
+                "inc": "#include <SSRob_DDout.h>\n",
+                "def": "SSRob_DDout led{0}(PORT{0});\n",
+                "work": "led{0}.write(0,!{1});\n",
+                "loop": ""
+            }
+        ],
+        [ // 蜂鸣器图块
+            "w",
+            "set Buzzer %d.digitalPort is %d.offOn",
+            "setBuzzer",
+            "PORT2",
+            "ON",
+            {
+                "encode": "{d0}{d1}",
+                "setup": "",
+                "inc": "#include <SSRob_DDout.h>\n",
+                "def": "SSRob_DDout buzzer{0}(PORT{0});\n",
+                "work": "buzzer{0}.write(0,{1});\n",
+                "loop": ""
+            }
+        ],
+        [ // 舵机图块
+            "w",
+            "set Servo %d.pwmPort is %d.angleValue",
+            "setServo",
+            "PORT2",
+            "90",
+            {
+                "encode": "{d0}{s1}",
+                "setup": "sservo{0}.init();\n",
+                "inc": "#include <SSRob_Servo.h>\n",
+                "def": "SSRob_Servo sservo{0}(PORT{0});\n",
+                "work": "sservo{0}.write({1});\n",
+                "loop": ""
+            }
+        ],
+        [ // 分割块
+            "-"
+        ],
+        [ // 双巡线传感器模块
+            "b",
+            "two channel line follower %d.digitalPort %d.leftRight is %d.whiteBlack",
+            "getDoubleTracker",
+            "PORT2",
+            "LEFT",
+            "BLACK",
+            {
+                "encode": "{d0}{d1}{d2}",
+                "setup": "",
+                "inc": "#include <SSRob_DDin.h>\n",
+                "def": "SSRob_DDin doubletracker{0}(PORT{0});\n",
+                "work": "doubletracker{0}.read({1}) == {2}",
+                "loop": ""
+            }
+        ],
+        [ // 四巡线传感器模块
+            "b",
+            "four channel line follower %d.digitalPort %d.digitalPort %d.ABDC is %d.whiteBlack",
+            "getFourTracker",
+            "PORT2",
+            "PORT9",
+            "ChannelA",
+            "BLACK",
+            {
+                "encode": "{d0}{d1}{d2}{d3}",
+                "setup": "",
+                "inc": "#include <SSRob_DDDDin.h>\n",
+                "def": "SSRob_DDDDin fourtracker{0}(PORT{0},PORT{1});\n",
+                "work": "fourtracker{0}.read({2}) == {3}",
+                "loop": ""
+            }
+        ],
+        [ // 双输入按键模块
+            "b",
+            "double butten %d.digitalPort %d.leftRight is %d.state",
+            "getTwoButten",
+            "PORT2",
+            "LEFT",
+            "ACTIVE",
+            {
+                "encode": "{d0}{d1}{d2}",
+                "setup": "",
+                "inc": "#include <SSRob_DDin.h>\n",
+                "def": "SSRob_DDin double_butten{0}(PORT{0});\n",
+                "work": "double_butten{0}.read({1}) == {2}",
+                "loop": ""
+            }
+        ],
+        [ // 触摸按键
+            "b",
+            "touch butten %d.digitalPort detect %d.state",
+            "getTouchButten",
+            "PORT2",
+            "ACTIVE",
+            {
+                "encode": "{d0}{d1}",
+                "setup": "",
+                "inc": "#include <SSRob_DDin.h>\n",
+                "def": "SSRob_DDin touchButten{0}(PORT{0});\n",
+                "work": "touchButten{0}.read(0) == {1}",
+                "loop": ""
+            }
+        ],
+        [ // 触碰开关
+            "b",
+            "tack switch %d.digitalPort detect %d.state",
+            "getTackSwitch",
+            "PORT2",
+            "ACTIVE",
+            {
+                "encode": "{d0}{d1}",
+                "setup": "",
+                "inc": "#include <SSRob_DDin.h>\n",
+                "def": "SSRob_DDin tackSwitch{0}(PORT{0});\n",
+                "work": "tackSwitch{0}.read(0) == {1}",
+                "loop": ""
+            }
+        ],
+        [ // 声音传感器
+            "b",
+            "sound sensor %d.digitalPort detect %d.state",
+            "getSoundSensor",
+            "PORT2",
+            "ACTIVE",
+            {
+                "encode": "{d0}{d1}",
+                "setup": "",
+                "inc": "#include <SSRob_DDin.h>\n",
+                "def": "SSRob_DDin soundSensor{0}(PORT{0});\n",
+                "work": "soundSensor{0}.read(0) == {1}",
+                "loop": ""
+            }
+        ],
+        [ // 土壤湿度传感器图块
+            "b",
+            "soil hunmidity sensor %d.digitalPort detect %d.hunmidity",
+            "getSoilHunmidity1",
+            "PORT4",
+            "WET",
+            {
+                "encode": "{d0}{d1}",
+                "setup": "",
+                "inc": "#include <SSRob_DAin.h>\n",
+                "def": "SSRob_DAin soilHumidity{0}(PORT{0});\n",
+                "work": "soilHumidity{0}.read(0) == {1}",
+                "loop": ""
+            }
+        ],
+        [ // 火焰传感器
+            "b",
+            "fire sensor %d.digitalPort detect %d.state",
+            "getFireSensor",
+            "PORT4",
+            "ACTIVE",
+            {
+                "encode": "{d0}{d1}",
+                "setup": "",
+                "inc": "#include <SSRob_DAin.h>\n",
+                "def": "SSRob_DAin fireSensor{0}(PORT{0});\n",
+                "work": "fireSensor{0}.read(0) == {1}",
+                "loop": ""
+            }
+        ],
+        [ // 避障传感器
+            "b",
+            "obstacle avoidance sensor %d.digitalPort detect %d.state",
+            "getObstacleAvoidance",
+            "PORT4",
+            "ACTIVE",
+            {
+                "encode": "{d0}{d1}",
+                "setup": "",
+                "inc": "#include <SSRob_DAin.h>\n",
+                "def": "SSRob_DAin obstacleAvoidanceSensor{0}(PORT{0});\n",
+                "work": "obstacleAvoidanceSensor{0}.read(0) == {1}",
+                "loop": ""
+            }
+        ],
+        [ // 分割块
+            "-"
+        ],
+        [ // 超声波传感器图块
+            "r",
+            "ultrasonic sensor %d.digitalPort read distance",
+            "getUltrasonic",
+            "PORT2",
+            {
+                "encode": "{d0}",
+                "setup": "",
+                "inc": "#include <SSRob_Ultrasonic.h>\n",
+                "def": "SSRob_Ultrasonic ultrasonic{0}(PORT{0});\n",
+                "work": "ultrasonic{0}.distanceCm()",
+                "loop": ""
+            }
+        ],
+        [ //电位器模块
+            "r",
+            "potentiono meter sensor %d.analogPort read analog data",
+            "getPotentionoMeterSensor",
+            "PORT4",
+            {
+                "encode": "{d0}",
+                "setup": "",
+                "inc": "#include <SSRob_DAin.h>\n",
+                "def": "SSRob_DAin potentionoMeterSensor{0}(PORT{0});\n",
+                "work": "potentionoMeterSensor{0}.read(1)",
+                "loop": ""
+            }
+        ],
+        [ // 土壤湿度传感器模拟
+            "r",
+            "soil hunmidity sensor %d.analogPort read analog data",
+            "getSoilHunmidity2",
+            "PORT4",
+            {
+                "encode": "{d0}",
+                "setup": "",
+                "inc": "#include <SSRob_DAin.h>\n",
+                "def": "SSRob_DAin soilHumidity{0}(PORT{0});\n",
+                "work": "soilHumidity{0}.read(1)",
+                "loop": ""
+            }
+        ],
+        [ // 火焰传感器模拟
+            "r",
+            "fire sensor %d.analogPort read analog data",
+            "getFireSensor2",
+            "PORT4",
+            {
+                "encode": "{d0}",
+                "setup": "",
+                "inc": "#include <SSRob_DAin.h>\n",
+                "def": "SSRob_DAin fireSensor{0}(PORT{0});\n",
+                "work": "fireSensor{0}.read(1)",
+                "loop": ""
+            }
+        ],
+        [ // 避障传感器模拟
+            "r",
+            "obstacle avoidance sensor %d.analogPort read analog data",
+            "getObstacleAvoidanceSensor2",
+            "PORT4",
+            {
+                "encode": "{d0}",
+                "setup": "",
+                "inc": "#include <SSRob_DAin.h>\n",
+                "def": "SSRob_DAin obstacleAvoidanceSensor{0}(PORT{0});\n",
+                "work": "obstacleAvoidanceSensor{0}.read(1)",
+                "loop": ""
+            }
+        ],
+        [ // DHT11
+            "r",
+            "read DHT11 %d.digitalPort temperature",
+            "getDht11Temperature",
+            "PORT2",
+            {
+                "encode": "{d0}",
+                "setup": "",
+                "inc": "#include<SSRob_DHT.h>\n",
+                "def": "SSRob_DHT dht{0}(PORT{0}, DHT11);\n",
+                "work": "dht{0}.readTemperature()",
+                "loop": ""
+            }
+        ],
+        [
+            "r",
+            "read DHT11 %d.digitalPort humidity",
+            "getDht11Humidity",
+            "PORT2",
+            {
+                "encode": "{d0}",
+                "setup": "",
+                "inc": "#include<SSRob_DHT.h>\n",
+                "def": "SSRob_DHT dht{0}(PORT{0}, DHT11);\n",
+                "work": "dht{0}.readHumidity()",
+                "loop": ""
+            }
+        ],
+        [ // 分隔符
+            "-"
+        ],
+        [ // PS2遥控
+            "w",
+            "start detect PS2 remoter",
+            "getPS2start",
+            {
+                "setup": "ps2x.config_gamepad(0, 13, 1, A3, false, false);",
+                "inc": "#include <SSRob_PS2X_lib.h>\n",
+                "def": "SSRob_PS2X ps2x;\n",
+                "work": "ps2x.read_gamepad(false, 0);\n",
+                "loop": ""
+            }
+        ],
+        [
+            "b",
+            "the %d.buttons button was pressed",
+            "getPS2Pressed",
+            "PS2X_TRIANGLE",
+            {
+                "setup": "",
+                "inc": "",
+                "def": "",
+                "work": "ps2x.ButtonPressed({0})",
+                "loop": ""
+            }
+        ],
+        [
+            "b",
+            "the %d.buttons button was just Released",
+            "getPS2Released",
+            "PS2X_CIRCLE",
+            {
+                "setup": "",
+                "inc": "",
+                "def": "",
+                "work": "ps2x.ButtonReleased({0})",
+                "loop": ""
+            }
+        ],
+        [
+            "b",
+            "the %d.buttons button keep pressing",
+            "getPS2KeepPressed",
+            "PS2X_SQUARE",
+            {
+                "setup": "",
+                "inc": "",
+                "def": "",
+                "work": "ps2x.Button({0})",
+                "loop": ""
+            }
+        ],
+        [
+            "r",
+            "%d.sticks stick value",
+            "getPS2StickAnalog",
+            "PS2X_RIGHT_HORIZONTAL",
+            {
+                "setup": "",
+                "inc": "",
+                "def": "",
+                "work": "ps2x.Analog({0})",
+                "loop": ""
+            }
+        ],
+        [ // 分隔符
+            "-"
+        ],
+        [ // 有数据可用
+            "b",
+            "data available?",
+            "isAvailable",
+            {
+                "setup": "Serial.begin(115200);\n",
+                "inc": "",
+                "def": "",
+                "work": "Serial.available()",
+                "loop": ""
+            }
+        ],
+        [ // 读取一个字节
+            "R",
+            "serial read byte",
+            "serialRead",
+            {
+                "setup": "Serial.begin(115200);\n",
+                "inc": "",
+                "def": "",
+                "work": "Serial.read()",
+                "loop": ""
+            }
+        ],
+        [ // 读取一行数据
+            "R",
+            "read line",
+            "readLine",
+            {
+                "setup": "Serial.begin(115200);\n",
+                "inc": "",
+                "def": "",
+                "work": "Serial.readString()",
+                "loop": ""
+            }
+        ],
+        [ // 发送变量
+            "w",
+            "send command %s = %s",
+            "writeCommand",
+            "变量名",
+            "数值",
+            {
+                "setup": "Serial.begin(115200);\n",
+                "inc": "",
+                "def": "",
+                "work": "Serial.print({0});Serial.print(\"=\");Serial.println({1});\n",
+                "loop": ""
+            }
+        ],
+        [ // 写入文字
+            "w",
+            "serial write text %s",
+            "serialWrite",
+            "hello",
+            {
+                "setup": "Serial.begin(115200);\n",
+                "inc": "",
+                "def": "",
+                "work": "Serial.println({0});\n",
+                "loop": ""
+            }
+        ]
+    ],
+    "menus": {
+        "direction": [
+            "run forward",
+            "run backward",
+            "turn right",
+            "turn left"
+        ],
+        "motorvalue": [
+            255,
+            100,
+            50,
+            0,
+            -50,
+            -100,
+            -255
+        ],
+        "angleValue": [
+            0,
+            45,
+            90,
+            135,
+            180
+        ],
+        "motorPort": [
+            "PORT1",
+            "PORT2",
+            "PORT3",
+            "PORT8",
+            "PORT9",
+            "PORT10"
+        ],
+        "digitalPort": [
+            "PORT2",
+            "PORT3",
+            "PORT4",
+            "PORT5",
+            "PORT6",
+            "PORT7",
+            "PORT8",
+            "PORT9"
+        ],
+        "analogPort": [
+            "PORT4",
+            "PORT5",
+            "PORT7",
+            "PORT8"
+        ],
+        "pwmPort": [
+            "PORT2",
+            "PORT3",
+            "PORT8",
+            "PORT9"
+        ],
+        "leftRight": [
+            "LEFT",
+            "RIGHT"
+        ],
+        "ABDC": [
+            "ChannelA",
+            "ChannelB",
+            "ChannelC",
+            "ChannelD"
+        ],
+        "whiteBlack": [
+            "BLACK",
+            "WHITE"
+        ],
+        "offOn": [
+            "OFF",
+            "ON"
+        ],
+        "hunmidity": [
+            "DRY",
+            "WET"
+        ],
+        "state": [
+            "ACTIVE",
+            "UNACTIVE"
+        ],
+        "buttons": [
+            "PS2X_SELECT",
+            "PS2X_L3",
+            "PS2X_R3",
+            "PS2X_START",
+            "PS2X_UP",
+            "PS2X_RIGHT",
+            "PS2X_DOWN",
+            "PS2X_LEFT",
+            "PS2X_L2",
+            "PS2X_R2",
+            "PS2X_L1",
+            "PS2X_R1",
+            "PS2X_TRIANGLE",
+            "PS2X_CIRCLE",
+            "PS2X_CROSS",
+            "PS2X_SQUARE"
+        ],
+        "sticks": [
+            "PS2X_RIGHT_HORIZONTAL",
+            "PS2X_RIGHT_VERTICAL",
+            "PS2X_LEFT_HORIZONTAL",
+            "PS2X_LEFT_VERTICAL"
+        ]
+    },
+    "values": {
+        "run forward": 0,
+        "run backward": 1,
+        "turn left": 2,
+        "turn right": 3,
+        "PORT1": 1,
+        "PORT2": 2,
+        "PORT3": 3,
+        "PORT4": 4,
+        "PORT5": 5,
+        "PORT6": 6,
+        "PORT7": 7,
+        "PORT8": 8,
+        "PORT9": 9,
+        "PORT10": 10,
+        "LEFT": 0,
+        "RIGHT": 1,
+        "ChannelA": 0,
+        "ChannelB": 1,
+        "ChannelC": 2,
+        "ChannelD": 3,
+        "BLACK": 1,
+        "WHITE": 0,
+        "ON": 1,
+        "OFF": 0,
+        "DRY": 1,
+        "WET": 0,
+        "ACTIVE": 0,
+        "UNACTIVE": 1,
+        "PS2X_SELECT": 1,
+        "PS2X_L3": 2,
+        "PS2X_R3": 4,
+        "PS2X_START": 8,
+        "PS2X_UP": 16,
+        "PS2X_RIGHT": 32,
+        "PS2X_DOWN": 64,
+        "PS2X_LEFT": 128,
+        "PS2X_L2": 256,
+        "PS2X_R2": 512,
+        "PS2X_L1": 1024,
+        "PS2X_R1": 2048,
+        "PS2X_TRIANGLE": 4096,
+        "PS2X_CIRCLE": 8192,
+        "PS2X_CROSS": 16384,
+        "PS2X_SQUARE": 32768,
+        "PS2X_RIGHT_HORIZONTAL": 5,
+        "PS2X_RIGHT_VERTICAL": 6,
+        "PS2X_LEFT_HORIZONTAL": 7,
+        "PS2X_LEFT_VERTICAL": 8
+    },
+    "translators": {
+        "zh_CN": {
+            "Warden Main": "Warden主程序",
+            "PORT1": "接口1",
+            "PORT2": "接口2",
+            "PORT3": "接口3",
+            "PORT4": "接口4",
+            "PORT5": "接口5",
+            "PORT6": "接口6",
+            "PORT7": "接口7",
+            "PORT8": "接口8",
+            "PORT9": "接口9",
+            "PORT10": "接口10",
+            "LEFT": "左侧",
+            "RIGHT": "右侧",
+            "BLACK": "黑色",
+            "WHITE": "白色",
+            "OFF": "关",
+            "ON": "开",
+            "DRY": "干燥",
+            "WET": "潮湿",
+            "ACTIVE": "被激活",
+            "UNACTIVE": "未被激活",
+            "warden car %m.direction at speed %d.motorvalue": "卫士小车 %m.direction 速度为 %d.motorvalue",
+            "set motor %d.motorPort speed %d.motorvalue": "设置电机 %d.motorPort 速度为 %d.motorvalue",
+            "set LED %d.digitalPort is %d.offOn": "设置LED %d.digitalPort 为 %d.offOn",
+            "set Buzzer %d.digitalPort is %d.offOn": "设置蜂鸣器 %d.digitalPort 为 %d.offOn",
+            "set Servo %d.pwmPort is %d.angleValue": "设置舵机 %d.pwmPort 角度为 %d.angleValue",
+            "ultrasonic sensor %d.digitalPort read distance": "超声波传感器 %d.digitalPort 读取距离",
+            "two channel line follower %d.digitalPort %d.leftRight is %d.whiteBlack": "双通道寻线传感器 %d.digitalPort %d.leftRight 检测到 %d.whiteBlack",
+            "four channel line follower %d.digitalPort %d.digitalPort %d.ABDC is %d.whiteBlack": "四通道巡线传感器 %d.digitalPort %d.digitalPort %d.ABDC 检测到 %d.whiteBlack",
+            "double butten %d.digitalPort %d.leftRight is %d.state": "双通道按键模块 %d.digitalPort %d.leftRight 按键检测到 %d.state",
+            "soil hunmidity sensor %d.digitalPort detect %d.hunmidity": "土壤湿度传感器 %d.digitalPort 检测到 %d.hunmidity",
+            "touch butten %d.digitalPort detect %d.state": "触摸按键 %d.digitalPort 检测到 %d.state",
+            "tack switch %d.digitalPort detect %d.state": "触碰开关 %d.digitalPort 检测到 %d.state",
+            "fire sensor %d.digitalPort detect %d.state": "火焰传感器 %d.digitalPort 检测到 %d.state",
+            "obstacle avoidance sensor %d.digitalPort detect %d.state": "避障传感器 %d.digitalPort 检测到 %d.state",
+            "sound sensor %d.digitalPort detect %d.state": "声音传感器 %d.digitalPort 检测到 %d.state",
+            "soil hunmidity sensor %d.analogPort read analog data": "土壤湿度传感器 %d.digitalPort 读取模拟值",
+            "potentiono meter sensor %d.analogPort read analog data": "电位器模块 %d.digitalPort 读取模拟值",
+            "fire sensor %d.analogPort read analog data": "火焰传感器 %d.digitalPort 读取模拟值",
+            "obstacle avoidance sensor %d.analogPort read analog data": "避障传感器 %d.digitalPort 读取模拟值",
+            "read DHT11 %d.digitalPort temperature": "DTH11温湿度传感器 %d.digitalPort 读取温度",
+            "read DHT11 %d.digitalPort humidity": "DTH11温湿度传感器 %d.digitalPort 读取湿度",
+            "PS2X_SELECT": "选择键",
+            "PS2X_START": "开始键",
+            "PS2X_RIGHT": "右按键",
+            "PS2X_LEFT": "左按键",
+            "PS2X_DOWN": "下按键",
+            "PS2X_UP": "上按键",
+            "PS2X_CIRCLE": "圆圈",
+            "PS2X_CROSS": "叉号",
+            "PS2X_SQUARE": "正方形",
+            "PS2X_TRIANGLE": "三角形",
+            "PS2X_RIGHT_HORIZONTAL": "右摇杆的水平",
+            "PS2X_RIGHT_VERTICAL": "右摇杆的垂直",
+            "PS2X_LEFT_HORIZONTAL": "左摇杆的水平",
+            "PS2X_LEFT_VERTICAL": "左摇杆的垂直",
+            "start detect PS2 remoter": "读取PS2摇杆按钮",
+            "the %d.buttons button was pressed": "%d.buttons 按钮被按下",
+            "the %d.buttons button was just Released": "%d.buttons 按钮被放开",
+            "the %d.buttons button keep pressing": " %d.buttons 按钮被持续按下",
+            "%d.sticks stick value": "读取 %d.sticks 数值大小",
+            "PS2X_L3": "L3",
+            "PS2X_R3": "R3",
+            "PS2X_L2": "L2",
+            "PS2X_R2": "R2",
+            "PS2X_L1": "L1",
+            "PS2X_R1": "R1",
+            "ChannelA": "通道A",
+            "ChannelB": "通道B",
+            "ChannelC": "通道C",
+            "ChannelD": "通道D"
+        }
+    }
+}

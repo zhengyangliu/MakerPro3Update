@@ -47,21 +47,18 @@ Expand-Archive -Path "./Update.zip" -DestinationPath "./Temp" -Force
 # 删除旧文件和软件缓存
 Write-Host "正在删除旧文件..." -Foreground "Green"
 $ScrachLib = ".\ext\libraries"
-$KeepFolder = @("2.4G", "arduino", "Auriga", "mbot", "mega_pi", "mega_pi_pro", "orion", "oxford", "picoboard", "serial", "smartservo", "uno_shield")
-Get-ChildItem $ScrachLib -Exclude $KeepFolder -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force
+Get-ChildItem $ScrachLib -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force
 
 $ArduinoLib = ".\Arduino\portable\sketchbook\libraries"
-$KeepFolder = "makeblock"
-Get-ChildItem $ArduinoLib -Exclude $KeepFolder -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force
+Get-ChildItem $ArduinoLib -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force
 
 # 删除Appdata下的缓存
 Write-Host "正在清除缓存..." -Foreground "Green"
 Remove-Item "C:\Users\$env:UserName\AppData\Roaming\com.ScienceStormRobot.Scratch3.4.11" -Recurse -Force -ErrorAction SilentlyContinue
 
 # 复制更新包中的文件到程序中
-$KeepFolder = @("README.md", "Package.ps1", "KeepFile")
 Write-Host "正在更新文件..." -Foreground "Green"
-Copy-Item "./Temp/*" "./" -Exclude $KeepFolder -Force -Recurse
+Copy-Item "./Temp/*" "./" -Force -Recurse
 
 # 删除下载和解压的文件
 Write-Host "正在删除删除缓存的安装包..." -Foreground "Green"

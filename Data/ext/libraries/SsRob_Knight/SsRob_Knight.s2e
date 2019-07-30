@@ -1,0 +1,232 @@
+{
+    "extensionName": "SsRob_Knight",
+    "extensionPort": 0,
+    "sort": 0,
+    "firmware": "1.0",
+    "javascriptURL": "js/SsRob_Knight.js",
+    "blockSpecs": [
+        ["h", "Knight Main", "runArduino",
+        { "src": "", "inc": "#include <SsRob_IO_Knight.h>\n", "def": "", "setup": "", "loop": ""}],
+
+        ["w", "wait until run button is trigged", "waitUntil",
+        {"encode": "", "setup": "", "inc": "", "def": "SsRob_RunButton runbutton;\n", "work": "runbutton.wait();\n", "loop": ""}],
+
+        ["-"],
+
+        // 基础端口操作
+        ["w", "set %d.digitalPort is %d.highlow", "setDigitalPort", "P1", "HIGH",
+        {"encode": "{d0}{d1}", "setup": "", "inc": "", "def": "SsRob_Port dout{0}(P{0});\n", "work": "dout{0}.dWrite1({1});\n", "loop": ""}],
+
+        ["b", "detect digital port %d.digitalPort", "getDigitalPort", "P1",
+        {"encode": "{d0}", "setup": "", "inc": "", "def": "SsRob_Port din{0}(P{0});\n", "work": "din{0}.dRead1()", "loop": ""}],
+
+        ["r", "analog port %d.analogPort read analog data", "getAnalog", "P5",
+        {"encode": "{d0}", "setup": "", "inc": "", "def": "SsRob_Port ain{0}(P{0});\n", "work": "ain{0}.aRead1()", "loop": ""}],
+
+        ["-"], 
+        // 板载功能模块操作
+        ["w", "set motor %d.motorPort is %d.motorvalue", "setMotor", "M1", 255,
+        {"encode": "{d0}{d1}", "setup": "", "inc": "", "def": "SsRob_DcMotor dc_motor{0}(M{0});\n", "work": "dc_motor{0}.setSpeed({1});\n", "loop": ""}],
+
+        ["w", "set servo %d.servoPort is %d.angleValue", "setServo", "S1", "90",
+        {"encode": "{d0}{d1}", "setup": "servo{0}.init();\n", "inc": "", "def": "SsRob_Servo servo{0}(S{0});\n", "work": "servo{0}.write({1});\n", "loop": ""}],
+
+        ["w", "set board red LED %d.offOn", "setBoardLED", "ON",
+        {"encode": "{d0}", "setup": "", "inc": "", "def": "SsRob_Port board_led(P5);\n", "work": "board_led.dWrite1({0});\n", "loop": ""}],
+
+        ["w", "set board beep %d.offOn", "setBoardBeep", "ON",
+        {"encode": "{d0}", "setup": "", "inc": "", "def": "SsRob_Port board_beep(P6);\n", "work": "board_beep.dWrite1({0});\n", "loop": ""}],
+
+        ["w", "set board RGB LED red %d.value green %d.value blue %d.value", "setBoardRGBLED", 0, 0, 0,
+        {"encode": "{d0}{d1}{d2}", "setup": "", "inc": "", "def": "SsRob_RGBLED board_rgbled(P9);\n", "work": "board_rgbled.setcolor({0}, {1}, {2});\n", "loop": ""}],
+
+        ["b", "board touch switch is %d.state", "getBoardTouchswitch", "ACTIVE",
+        {"encode": "{d0}", "setup": "", "inc": "", "def": "SsRob_Port board_touchswitch(P7);\n", "work": "board_touchswitch.dRead1() == {0}", "loop": ""}],
+
+        ["b", "board mic is %d.state", "getBoardMic", "ACTIVE",
+        {"encode": "{d0}", "setup": "", "inc": "", "def": "SsRob_Port board_mic(P8);\n", "work": "board_mic.dRead1() == {0}", "loop": ""}],
+
+        ["-"],
+
+        // 特殊驱动模块操作
+        ["b", "two channel line follower %d.digitalPort %d.leftRight is %d.whiteBlack", "get2ChaLineFollower", "P1", "LEFT", "BLACK",
+        {"inc": "", "def": "SsRob_TwoChLineFollower twochlinefollower{0}(P{0});\n", "setup": "", "work": "twochlinefollower{0}.read({1}) == {2}", "loop": ""}],
+
+        ["r", "ultrasonic sensor %d.digitalPort read distance", "getUltrasonic", "P1",
+        {"inc": "", "def": "SsRob_Ultrasonic ultrasonic{0}(P{0});\n", "setup": "", "work": "ultrasonic{0}.distanceCm()\n", "loop": ""}],
+
+        ["r", "read DHT11 %d.digitalPort temperature", "getDht11Temperature", "P1",
+        {"inc": "", "def": "SsRob_DHT11 dht11{0}(P{0});\n", "setup": "", "work": "dht11{0}.temperature()", "loop": "dht11{0}.read();\n"}],
+
+        ["r", "read DHT11 %d.digitalPort humidity", "getDht11Humidity", "P1",
+        {"inc": "", "def": "SsRob_DHT11 dht11{0}(P{0});\n", "setup": "", "work": "dht11{0}.humidity()", "loop": "dht11{0}.read();\n"}],
+
+        ["w", "set RGB LED %d.digitalPort red %d.value green %d.value blue %d.value", "setREGLED", "P1", 0, 0, 0,
+        {"encode": "{d0}{d1}{d2}{d3}", "setup": "", "inc": "", "def": "SsRob_RGBLED rgb_led{0}(P{0});\n", "work": "rgb_led{0}.setcolor({1}, {2}, {3});\n", "loop": ""}],
+
+        ["w", "passive beep %d.digitalPort play on note %d.note beat %d.beats","runBuzzer", "P1", "C4", "Half",
+        {"encode":"{d0}{d1}{d2}","setup":"","inc":"","def":"SsRob_Buzzer buzzer{0}(P{0});\n","work":"buzzer{0}.tone({1}, {2});\ndelay(20);\n","loop":""}],
+    
+        ["-"],
+
+        // 板中心接口模块操作
+        ["w", "set OLED display %s = %d.value %s", "setOLED", "Distance", 10, "cm",
+        { "inc": "", "def": "SsRob_OLED oled;\n", "setup": "oled.begin();", "work": "oled.show({0}, {1}, {2});\n", "loop": ""}],
+
+        ["w", "start detect PS2 remoter", "getPS2start",
+        {"setup": "", "inc": "", "def": "SsRob_PS2 ps2;\n", "work": "ps2.read();\n", "loop": ""}],
+
+        ["b", "the %d.buttons button was pressed", "getPS2Pressed", "PS2X_TRIANGLE",
+        {"setup": "", "inc": "", "def": "", "work": "ps2.isButtonPressed({0})", "loop": ""}],
+
+        ["b", "the %d.buttons button was just Released", "getPS2Released", "PS2X_CIRCLE",
+        {"setup": "", "inc": "", "def": "", "work": "ps2.isButtonReleased({0})", "loop": ""}],
+
+        ["b", "the %d.buttons button keep pressing", "getPS2KeepPressed", "PS2X_SQUARE",
+        {"setup": "", "inc": "", "def": "", "work": "ps2.isButtonKeepPressed({0})", "loop": ""}],
+
+        ["r", "%d.sticks stick value", "getPS2StickAnalog", "PS2X_RIGHT_HORIZONTAL",
+        {"setup": "", "inc": "", "def": "", "work": "ps2.getStickAnalog({0})", "loop": ""}],
+
+        ["-"],
+
+        // 串口操作
+        ["b", "data available?", "isAvailable",
+        {"setup": "Serial.begin(9600);\n", "inc": "", "def": "", "work": "Serial.available()", "loop": ""}],
+
+        ["R", "serial read byte", "serialRead",
+        {"setup": "Serial.begin(9600);\n", "inc": "", "def": "", "work": "Serial.read()", "loop": ""}],
+
+        ["R", "read line",  "readLine",
+        {"setup": "Serial.begin(9600);\n", "inc": "", "def": "", "work": "Serial.readString()", "loop": ""}],
+
+        ["w", "send command %s = %s", "writeCommand", "变量名", "数值",
+        {"setup": "Serial.begin(115200);\n", "inc": "", "def": "", "work": "Serial.print({0});Serial.print(\"=\");Serial.println({1});\n", "loop": ""}],
+        
+        ["w", "serial write text %s", "serialWrite", "hello",
+        {"setup": "Serial.begin(115200);\n", "inc": "", "def": "", "work": "Serial.println({0});\n", "loop": ""}]
+    ],
+    "menus": {
+        "motorvalue": [255, 100, 50, 0, -50, -100, -255],
+        "angleValue": [0, 45, 90, 135, 180],
+        "motorPort": ["M1", "M2"],
+        "digitalPort": ["P1", "P2", "P3", "P4"],
+        "analogPort": ["P3", "P4"],
+        "servoPort": ["S1", "S2"],
+        "leftRight": ["LEFT", "RIGHT"],
+        "whiteBlack": ["BLACK", "WHITE"],
+        "offOn": ["OFF", "ON"],
+        "state": ["DILE", "ACTIVE"],
+        "note":["C2","D2","E2","F2","G2","A2","B2","C3","D3","E3","F3","G3","A3","B3","C4","D4","E4","F4","G4","A4","B4","C5","D5","E5","F5","G5","A5","B5","C6","D6","E6","F6","G6","A6","B6","C7","D7","E7","F7","G7","A7","B7","C8","D8"],
+		"beats":["Half","Quarter","Eighth","Whole","Double"],
+        "buttons": ["PS2X_SELECT", "PS2X_L3", "PS2X_R3", "PS2X_START", "PS2X_UP", "PS2X_RIGHT", "PS2X_DOWN", "PS2X_LEFT", "PS2X_L2", "PS2X_R2", "PS2X_L1", "PS2X_R1", "PS2X_TRIANGLE", "PS2X_CIRCLE", "PS2X_CROSS", "PS2X_SQUARE"],
+        "sticks": ["PS2X_RIGHT_HORIZONTAL", "PS2X_RIGHT_VERTICAL", "PS2X_LEFT_HORIZONTAL", "PS2X_LEFT_VERTICAL"]
+    },
+    "values": {
+        "HIGH": 1,
+        "LOW": 0,
+        "OFF": 0,
+        "ON": 1,
+        "IDLE": 0,
+        "ACTIVE": 1,
+        "LEFT": 0,
+        "RIGHT": 1,
+        "BLACK": 0,
+        "WHITE": 1,
+        "P1": 1,
+        "P2": 2,
+        "P3": 3,
+        "P4": 4,
+        "M1": 1,
+        "M2": 2,
+        "S1": 1,
+        "S2": 2,
+        "B0":31,"C1":33,"D1":37,"E1":41,"F1":44,"G1":49,"A1":55,"B1":62,
+			"C2":65,"D2":73,"E2":82,"F2":87,"G2":98,"A2":110,"B2":123,
+			"C3":131,"D3":147,"E3":165,"F3":175,"G3":196,"A3":220,"B3":247,
+			"C4":262,"D4":294,"E4":330,"F4":349,"G4":392,"A4":440,"B4":494,
+			"C5":523,"D5":587,"E5":659,"F5":698,"G5":784,"A5":880,"B5":988,
+			"C6":1047,"D6":1175,"E6":1319,"F6":1397,"G6":1568,"A6":1760,"B6":1976,
+			"C7":2093,"D7":2349,"E7":2637,"F7":2794,"G7":3136,"A7":3520,"B7":3951,
+            "C8":4186,"D8":4699,
+        "Half":500,"Quarter":250,"Eighth":125,"Whole":1000,"Double":2000,"Zero":0,
+        "PS2X_SELECT": 1,
+        "PS2X_L3": 2,
+        "PS2X_R3": 4,
+        "PS2X_START": 8,
+        "PS2X_UP": 16,
+        "PS2X_RIGHT": 32,
+        "PS2X_DOWN": 64,
+        "PS2X_LEFT": 128,
+        "PS2X_L2": 256,
+        "PS2X_R2": 512,
+        "PS2X_L1": 1024,
+        "PS2X_R1": 2048,
+        "PS2X_TRIANGLE": 4096,
+        "PS2X_CIRCLE": 8192,
+        "PS2X_CROSS": 16384,
+        "PS2X_SQUARE": 32768,
+        "PS2X_RIGHT_HORIZONTAL": 5,
+        "PS2X_RIGHT_VERTICAL": 6,
+        "PS2X_LEFT_HORIZONTAL": 7,
+        "PS2X_LEFT_VERTICAL": 8
+    },
+    "translators": {
+        "zh_CN": {
+            "Knight Main": "Knight主程序",
+            "wait until run button is trigged" : "等待运行按键被按下",
+            "set %d.digitalPort is %d.highlow": "设置 %d.digitalPort 为 %d.highlow",
+            "detect digital port %d.digitalPort": "读取 %d.digitalPort 电平",
+            "analog port %d.analogPort read analog data": "读取 %d.analogPort 模拟值",
+            "set motor %d.motorPort is %d.motorvalue": "设置电机 %d.motorPort 为 %d.motorvalue",
+            "set servo %d.servoPort is %d.angleValue": "设置舵机 %d.servoPort 角度为 %d.angleValue",
+            "set board red LED %d.offOn": "设置板载红色LED为 %d.offOn",
+            "set board beep %d.offOn": "设置板载蜂鸣器为 %d.offOn",
+            "set board RGB LED red %d.value green %d.value blue %d.value": "设置板载RGB LED为 红色 %d.value 绿色 %d.value 蓝色 %d.value",
+            "board touch switch is %d.state": "板载触摸开关状态为 %d.state",
+            "board mic is %d.state": "板载声音传感器状态为  %d.state",
+            "two channel line follower %d.digitalPort %d.leftRight is %d.whiteBlack": "双通道寻线传感器 %d.digitalPort %d.leftRight 检测到 %d.whiteBlack",
+            "ultrasonic sensor %d.digitalPort read distance": "超声波传感器 %d.digitalPort 读取距离",
+            "read DHT11 %d.digitalPort temperature": "温湿度传感器 %d.digitalPort 读取温度",
+            "read DHT11 %d.digitalPort humidity": "温湿度传感器 %d.digitalPort 读取湿度",
+            "set RGB LED %d.digitalPort red %d.value green %d.value blue %d.value": "设置RGB LED颜色为 %d.digitalPort 红色 %d.value 绿色 %d.value 蓝色 %d.value",
+            "passive beep %d.digitalPort play on note %d.note beat %d.beats": "无源蜂鸣器 %d.digitalPort 播放音调为 %d.note 持续 %d.beats",
+            "set OLED display %s = %d.value %s": "设置OLED显示屏显示 %s = %d.value %s",
+            "start detect PS2 remoter": "读取PS2摇杆按钮",
+            "the %d.buttons button was pressed": "%d.buttons 按钮被按下",
+            "the %d.buttons button was just Released": "%d.buttons 按钮被放开",
+            "the %d.buttons button keep pressing": " %d.buttons 按钮被持续按下",
+            "%d.sticks stick value": "读取 %d.sticks 数值大小",
+            "HIGH": "高电平",
+            "LOW": "低电平",
+            "OFF": "关闭",
+            "ON": "开启",
+            "IDLE": "待机",
+            "ACTIVE": "激活",
+            "LEFT": "左侧",
+            "RIGHT": "右侧",
+            "BLACK": "黑色",
+            "WHITE": "白色",
+            "PS2X_SELECT": "选择键",
+            "PS2X_START": "开始键",
+            "PS2X_RIGHT": "右按键",
+            "PS2X_LEFT": "左按键",
+            "PS2X_DOWN": "下按键",
+            "PS2X_UP": "上按键",
+            "PS2X_CIRCLE": "圆圈",
+            "PS2X_CROSS": "叉号",
+            "PS2X_SQUARE": "正方形",
+            "PS2X_TRIANGLE": "三角形",
+            "PS2X_RIGHT_HORIZONTAL": "右摇杆的水平",
+            "PS2X_RIGHT_VERTICAL": "右摇杆的垂直",
+            "PS2X_LEFT_HORIZONTAL": "左摇杆的水平",
+            "PS2X_LEFT_VERTICAL": "左摇杆的垂直",
+            "PS2X_L3": "L3",
+            "PS2X_R3": "R3",
+            "PS2X_L2": "L2",
+            "PS2X_R2": "R2",
+            "PS2X_L1": "L1",
+            "PS2X_R1": "R1",
+        }
+    }
+}
