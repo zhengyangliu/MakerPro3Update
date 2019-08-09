@@ -1,6 +1,10 @@
 # 变更记录 #
 
-- Lastest Version: V2.2
+- Lastest Version: V2.3
+
+	修复Warden插件的错误修改导致的编译无法完成的问题，修复旧版库文件SSRob_DDDDin.h的错误导致DDin和DDDDin无法同时使用的问题
+
+-V2.2
 
 	修复block插件缺失的端口定义
 

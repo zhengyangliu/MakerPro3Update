@@ -1,5 +1,5 @@
-#ifndef __SSROB_DDIN_H
-#define __SSROB_DDIN_H
+#ifndef __SSROB_DDDDIN_H
+#define __SSROB_DDDDIN_H
 
 #include <Arduino.h>
 #include "SSRob.h"
