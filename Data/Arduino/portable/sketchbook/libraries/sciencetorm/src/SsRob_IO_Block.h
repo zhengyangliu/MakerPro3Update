@@ -1,9 +1,9 @@
 /*
-    科技风暴机器人 Block版编程主板 V1.0
+    科技风暴机器人Block编程主板
  */
 
-#ifndef __IO_LPB_V1__H
-#define __IO_LPB_V1__H
+#ifndef __SSROB_IO_BLOCK_H
+#define __SSROB_IO_BLOCK_H
 
 #include "SsRob_Port.h"
 #include "SsRob_RGBLED.h"
@@ -15,6 +15,7 @@
 #include "SsRob_DcMotor.h"
 #include "SsRob_RunButton.h"
 #include "SsRob_Servo.h"
+#include "SsRob_TwoChLineFollower.h"
 
 SsRob_Port_Sig ssrobPort[30] =
 {
@@ -55,10 +56,10 @@ SsRob_Port_Sig ssrobPort[30] =
     {NC, NC},
     {NC, NC},
     {NC, NC},
-    /* Green Button */
+    /* Run Button */
     {A6, NC}
 };
 
-uint8_t SsRob_Ps2ReciverPin[4] = {0, 13, 1, A3};
+uint8_t SsRob_Ps2ReciverPin[4] = {1, A1, 0, A0};
 
 #endif

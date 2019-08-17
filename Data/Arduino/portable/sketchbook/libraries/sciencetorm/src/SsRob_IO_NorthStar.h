@@ -1,9 +1,9 @@
 /*
-    科技风暴机器人 Block版编程主板 V0.1
+    科技风暴机器人NorthStar编程主板
  */
 
-#ifndef __IO_GP_V1__H
-#define __IO_GP_V1__H
+#ifndef __SsRob_IO_NorthStar_H
+#define __SsRob_IO_NorthStar_H
 
 #include "SsRob_Port.h"
 #include "SsRob_RGBLED.h"
@@ -54,11 +54,10 @@ SsRob_Port_Sig ssrobPort[30] =
     {NC, NC},
     {NC, NC},
     {NC, NC},
-    /* Green Button Reserve*/
+    /* Run Button Reserve*/
     {NC, NC},
 };
 
-uint8_t SsRob_GreenButton = 2;
 uint8_t SsRob_Ps2ReciverPin[4] = {0, 13, 1, A3};
 
 #endif

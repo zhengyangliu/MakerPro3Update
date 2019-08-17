@@ -1,6 +1,9 @@
 /*
-    科技风暴机器人 Warden编程主板 V1.0
+    科技风暴机器人Knight编程主板
  */
+
+#ifndef __SSROB_IO_KNIGHT_H
+#define __SSROB_IO_KNIGHT_H
 
 #include "SsRob_Port.h"
 #include "SsRob_RGBLED.h"
@@ -57,7 +60,10 @@ SsRob_Port_Sig ssrobPort[30] =
     {NC, NC},
     {NC, NC},
     {NC, NC},
-    /* Green Button */
+    /* Run Button */
     {A6, NC}
 };
 
+uint8_t SsRob_Ps2ReciverPin[4] = {1, A1, 0, A0};
+
+#endif

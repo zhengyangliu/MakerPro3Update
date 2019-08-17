@@ -4,6 +4,10 @@
 
 SsRob_PS2::SsRob_PS2(void)
 {
+    // clk -> CLK
+    // cmd -> DO
+    // att -> CS
+    // dat -> DI
     ps2.config_gamepad(SsRob_Ps2ReciverPin[0], SsRob_Ps2ReciverPin[1], SsRob_Ps2ReciverPin[2], SsRob_Ps2ReciverPin[3]);
 }
 

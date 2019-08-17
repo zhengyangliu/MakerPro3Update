@@ -109,6 +109,8 @@
     "menus": {
         "motorvalue": [255, 100, 50, 0, -50, -100, -255],
         "angleValue": [0, 45, 90, 135, 180],
+        "value":[0,20,60,150,255],
+        "highlow": ["HIGH", "LOW"],
         "motorPort": ["M1", "M2"],
         "digitalPort": ["P1", "P2", "P3", "P4"],
         "analogPort": ["P3", "P4"],
