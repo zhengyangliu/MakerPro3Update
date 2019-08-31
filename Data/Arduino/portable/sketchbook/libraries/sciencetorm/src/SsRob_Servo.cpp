@@ -7,7 +7,7 @@ SsRob_Servo::SsRob_Servo(void) : SsRob_Port(0)
 
 }
 
-SsRob_Servo::SsRob_Servo(uint8_t port) : SsRob_Port(port)
+SsRob_Servo::SsRob_Servo(uint8_t port) : SsRob_Port(port, 1)
 {
 
 }
