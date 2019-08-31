@@ -1,6 +1,10 @@
 # 变更记录 #
 
-- Lastest Version: V2.4
+- Lastest Version: V2.5
+
+	修复了舵机驱动没有定义默认slot导致的部分电路板舵机功能无法使用的问题
+
+- V2.4
 
 	修复Block和Knight无法下拉RGB和电平选择菜单的问题
 	更新完成Block和Knight的PS2驱动
