@@ -17,15 +17,17 @@ public:
         pinMode(port.PortB, INPUT);
 
         _lastEnterTime = millis();
+        _measureFlag = true;
         _measureValue = 0;
     }
-
-    long _lastEnterTime;
-    long _measureValue;
     
     double distanceCm(void);
     
 private:
+    long _lastEnterTime;
+    bool _measureFlag;
+    long _measureValue;
+
     long measure(void);
 };
 
